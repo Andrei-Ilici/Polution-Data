@@ -11,6 +11,15 @@ from urllib.request import urlopen
 from bucket import connect_to_s3, list_s3_objects
 from database import print_vers, connect_to_db, create_database, use_database, create_uk_table, create_world_table
 
+from extract_UK import read_csv_lines, create_single_list, create_complete_list
+from transform_UK import individual_data_insertion
+from load_UK import insert_data_to_database
+
+# from extract_world import
+# from transform_world import
+# from load_world import
+
+# Firstly connect to the database and create the required tables
 conn = connect_to_db()
 cursor = conn.cursor()
 print('')
@@ -37,7 +46,29 @@ except Exception as ERROR:
     print('Error when creating World table: ' + str(ERROR))
 print('')
 
-
+# Now it's time to read the files in S3 and process the UK data
 bucket_name = os.getenv('AWS_BUCKET_NAME')
-s3 = connect_to_s3()
-list_s3_objects(s3, bucket_name)
+try:
+    s3 = connect_to_s3()
+except Exception as Error:
+    print('Error when connecting to Amazon S3: ' + str(ERROR))
+
+try:
+    list_s3_objects(s3, bucket_name)
+except Exception as Error:
+    print('Error when reading files from the S3 bucket: ' + str(ERROR))
+print('')
+
+# Process UK data through ETL
+
+file_list = ("Table1.csv", "Table2.csv", "Table3.csv", "Table4.csv")
+for filename in file_list:
+    try:
+        lines = read_csv_lines(filename, bucket_name, s3)
+        big_list = create_complete_list(filename, lines)
+        category = lines[0][1]
+        insert_data_to_database(conn, big_list, category, lines)
+    except Exception as Error:
+        print('Error when processing UK data: ' + str(ERROR))
+
+# Process World data coming from the Kering API

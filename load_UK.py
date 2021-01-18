@@ -1,5 +1,6 @@
+from transform_UK import individual_data_insertion
 
-def insert_data_to_database(big_list, category, lines):
+def insert_data_to_database(conn, big_list, category, lines):
     
     sql = "INSERT INTO UK_Emissions (measure, year, quarter, energy_supply, bussiness, transport, public, residential, other_sectors, total_co2, other_gases, other_gas_emissions) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) "
     cursor = conn.cursor()
