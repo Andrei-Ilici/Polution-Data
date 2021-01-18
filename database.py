@@ -3,10 +3,10 @@ import pymysql
 
 def connect_to_db():
     conn = pymysql.connect(
-        host = os.getenv('MY_SQL_HOST'),
-        port = int(os.getenv('MY_SQL_PORT')),
-        user = os.getenv('MY_SQL_USER'),
-        passwd = os.getenv('MY_SQL_PASSWORD'),
+        host = os.environ.get('MY_SQL_HOST'),
+        port = int(os.environ.get('MY_SQL_PORT')),
+        user = os.environ.get('MY_SQL_USER'),
+        passwd = os.environ.get('MY_SQL_PASSWORD'),
         charset='utf8mb4')
 
     # cursor = conn.cursor()
