@@ -11,13 +11,14 @@ from urllib.request import urlopen
 from bucket import connect_to_s3, list_s3_objects
 from database import print_vers, connect_to_db, create_database, use_database, create_uk_table, create_world_table
 
+from extract_world_countries import get_countries_list
 from extract_UK import read_csv_lines, create_single_list, create_complete_list
 from transform_UK import individual_data_insertion
 from load_UK import insert_data_to_database
 
 # from extract_world import
-# from transform_world import
-# from load_world import
+from transform_world import add_individual_kering
+from load_world import load_world_data
 
 # Firstly connect to the database and create the required tables
 conn = connect_to_db()
@@ -70,5 +71,18 @@ for filename in file_list:
         insert_data_to_database(conn, big_list, category, lines)
     except Exception as Error:
         print('Error when processing UK data: ' + str(ERROR))
+print('')
 
 # Process World data coming from the Kering API
+
+try:
+    countries_list = get_countries_list()
+except Exception as ERROR:
+    print('Error when extracting list of countries: ' + str(ERROR))
+print('')
+
+try:
+    load_world_data(conn, countries_list)
+except Exception as ERROR:
+    print ('Error when loading world data: ' + str(ERROR))
+print('')
