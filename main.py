@@ -16,18 +16,28 @@ cursor = conn.cursor()
 print('')
 
 try:
-    create_database(cursor, conn)
-    use_database(cursor, conn)
-    print('')
+    create_database(conn)
 except Exception as ERROR:
-    print(str(ERROR))
+    print('Error when creating database: ' + str(ERROR))
 
 try:
-    create_uk_table(cursor, conn)
-    create_world_table(cursor, conn)
-    print('')
+    use_database(conn)
 except Exception as ERROR:
-    print(str(ERROR))
+    print('Error when selecting database: ' + str(ERROR))
+print('')
 
+try:
+    create_uk_table(conn)
+except Exception as ERROR:
+    print('Error when creating UK table: ' + str(ERROR))
+
+try:
+    create_world_table(conn)
+except Exception as ERROR:
+    print('Error when creating World table: ' + str(ERROR))
+print('')
+
+
+bucket_name = os.getenv('AWS_BUCKET_NAME')
 s3 = connect_to_s3()
-list_s3_objects(s3)
+list_s3_objects(s3, bucket_name)

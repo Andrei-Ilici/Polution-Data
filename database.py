@@ -15,21 +15,23 @@ def connect_to_db():
 def print_vers(cursor):
     cursor.execute("select version()")
 
-def create_database(cursor, conn):
+def create_database(conn):
     create_database_sql = '''create database IF NOT EXISTS Project'''
+    cursor = conn.cursor()
     cursor.execute(create_database_sql)
     conn.commit()
     print("Successfully created Project database.")
 
 
-def use_database(cursor, conn):
+def use_database(conn):
     use_database_sql = '''use Project'''
+    cursor = conn.cursor()
     cursor.execute(use_database_sql)
     conn.commit()
     print("Selected Project database.")
 
 
-def create_uk_table(cursor, conn):
+def create_uk_table(conn):
     create_table1_sql = ''' CREATE TABLE IF NOT EXISTS UK_Emissions(
     measure VARCHAR(100) NOT NULL,
     year INT(4) NOT NULL,
@@ -44,13 +46,14 @@ def create_uk_table(cursor, conn):
     other_gases FLOAT NOT NULL,
     other_gas_emissions FLOAT NOT NULL
     )'''
-    
+
+    cursor = conn.cursor()
     cursor.execute(create_table1_sql)
     conn.commit()
     print("Successfully created UK Table.")
 
 
-def create_world_table(cursor, conn):
+def create_world_table(conn):
     
     create_table2_sql = """ CREATE TABLE IF NOT EXISTS World_Emissions(
     record_id VARCHAR(50) NOT NULL,
@@ -65,6 +68,7 @@ def create_world_table(cursor, conn):
     environmental_impact_group VARCHAR(50) NOT NULL
     )"""
 
+    cursor = conn.cursor()
     cursor.execute(create_table2_sql)
     conn.commit()
     print("Successfully created World Table.")
