@@ -11,5 +11,6 @@ def connect_to_s3():
 
 def list_s3_objects(s3):
     bucket_name = os.getenv('AWS_BUCKET_NAME')
-    for obj in s3.Bucket('development-test-bucket1').objects.all():
+    print('Found the following files in the {bucket_name} bucket: '.format(bucket_name = bucket_name))
+    for obj in s3.Bucket(str(bucket_name)).objects.all():
         print(obj.key)

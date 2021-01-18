@@ -1,6 +1,7 @@
 import os
 import pymysql
 
+# Use pymysql Python module to connect to the RDS MySQL database on Amazon Web Services.
 def connect_to_db():
     conn = pymysql.connect(
         host = os.environ.get('MY_SQL_HOST'),
@@ -9,24 +10,27 @@ def connect_to_db():
         passwd = os.environ.get('MY_SQL_PASSWORD'),
         charset='utf8mb4')
 
-    # cursor = conn.cursor()
     return conn
 
 def print_vers(cursor):
     cursor.execute("select version()")
 
-def create_database():
-    create_database_sql = '''create database Project'''
+def create_database(cursor, conn):
+    create_database_sql = '''create database IF NOT EXISTS Project'''
     cursor.execute(create_database_sql)
     conn.commit()
+    print("Successfully created Project database.")
 
-def use_database():
+
+def use_database(cursor, conn):
     use_database_sql = '''use Project'''
     cursor.execute(use_database_sql)
     conn.commit()
+    print("Selected Project database.")
 
-def create_uk_table():
-    create_table1_sql = ''' CREATE TABLE UK_Emissions(
+
+def create_uk_table(cursor, conn):
+    create_table1_sql = ''' CREATE TABLE IF NOT EXISTS UK_Emissions(
     measure VARCHAR(100) NOT NULL,
     year INT(4) NOT NULL,
     quarter CHAR(2) NOT NULL,
@@ -43,10 +47,12 @@ def create_uk_table():
     
     cursor.execute(create_table1_sql)
     conn.commit()
+    print("Successfully created UK Table.")
 
-def create_world_table():
+
+def create_world_table(cursor, conn):
     
-    create_table2_sql = """ CREATE TABLE World_Emissions(
+    create_table2_sql = """ CREATE TABLE IF NOT EXISTS World_Emissions(
     record_id VARCHAR(50) NOT NULL,
     impact_country VARCHAR(50) NOT NULL,
     raw_material VARCHAR(50) NOT NULL,
@@ -61,3 +67,4 @@ def create_world_table():
 
     cursor.execute(create_table2_sql)
     conn.commit()
+    print("Successfully created World Table.")
