@@ -9,7 +9,7 @@ import json
 from urllib.request import urlopen
 
 from bucket import connect_to_s3, list_s3_objects
-from database import print_vers, connect_to_db, create_database, use_database, create_uk_table, create_world_table
+from database import connect_to_db, create_database, use_database, create_uk_table, create_world_table
 
 from extract_world_countries import get_countries_list
 from extract_UK import read_csv_lines, create_single_list, create_complete_list
@@ -23,7 +23,7 @@ from load_world import load_world_data
 # Firstly connect to the database and create the required tables
 conn = connect_to_db()
 cursor = conn.cursor()
-print('')
+print('\n')
 
 try:
     create_database(conn)
@@ -51,12 +51,12 @@ print('')
 bucket_name = os.getenv('AWS_BUCKET_NAME')
 try:
     s3 = connect_to_s3()
-except Exception as Error:
+except Exception as ERROR:
     print('Error when connecting to Amazon S3: ' + str(ERROR))
 
 try:
     list_s3_objects(s3, bucket_name)
-except Exception as Error:
+except Exception as ERROR:
     print('Error when reading files from the S3 bucket: ' + str(ERROR))
 print('')
 
@@ -69,7 +69,7 @@ for filename in file_list:
         big_list = create_complete_list(filename, lines)
         category = lines[0][1]
         insert_data_to_database(conn, big_list, category, lines)
-    except Exception as Error:
+    except Exception as ERROR:
         print('Error when processing UK data: ' + str(ERROR))
 print('')
 
@@ -84,5 +84,5 @@ print('')
 try:
     load_world_data(conn, countries_list)
 except Exception as ERROR:
-    print ('Error when loading world data: ' + str(ERROR))
+    print('Error when loading world data: ' + str(ERROR))
 print('')

@@ -1,5 +1,6 @@
 
-def individual_data_insertion(category,current_big_list,i):
+
+def individual_data_insertion(category, current_big_list, i):
     measure = category
     year = current_big_list[i][0]
     quarter = current_big_list[i][1]
@@ -12,5 +13,7 @@ def individual_data_insertion(category,current_big_list,i):
     total_co2 = current_big_list[i][8]
     other_gases = current_big_list[i][9]
     other_gas_emissions = current_big_list[i][10]
-    val = (measure, year, quarter, energy_supply, bussiness, transport, public, residential, other_sectors, total_co2, other_gases, other_gas_emissions)
+    val = (measure, year, quarter, energy_supply, bussiness,
+           transport, public, residential, other_sectors,
+           total_co2, other_gases, other_gas_emissions)
     return val
